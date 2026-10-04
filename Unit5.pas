@@ -1,0 +1,219 @@
+unit Unit5;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrls, Grids, DBGrids, DB, ADODB, ExtCtrls,
+  ComCtrls;
+
+type
+  TForm1 = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    DBGrid1: TDBGrid;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBNavigator1: TDBNavigator;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    Edit1: TEdit;
+    ComboBox1: TComboBox;
+    ADOConnection1: TADOConnection;
+    ADOTable1: TADOTable;
+    DataSource1: TDataSource;
+    TabSheet2: TTabSheet;
+    ADOTable2: TADOTable;
+    DataSource2: TDataSource;
+    DBGrid2: TDBGrid;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Button8: TButton;
+    Button9: TButton;
+    Button10: TButton;
+    ComboBox2: TComboBox;
+    Button7: TButton;
+    Button11: TButton;
+    Commandes: TTabSheet;
+    ADOTableComande: TADOTable;
+    DataSource3: TDataSource;
+    DBGrid3: TDBGrid;
+    ADOTableDetailC: TADOTable;
+    DataSource4: TDataSource;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    ADOTableDetailCDesignation: TStringField;
+    ADOTableDetailCid_detail: TAutoIncField;
+    ADOTableDetailCidCommande: TIntegerField;
+    ADOTableDetailCid_produit: TIntegerField;
+    ADOTableDetailCprix: TBCDField;
+    ADOTableDetailCquantite: TIntegerField;
+    ADOTableDetailCdate: TDateTimeField;
+    ADOTableDetailCsousTotal: TBCDField;
+    DBLookupComboBox2: TDBLookupComboBox;
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
+
+    procedure Button9Click(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  ADOTable1.Append;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  ADOTable1.Post;
+  ShowMessage('Client enregistré avec succès.');
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  if not ADOTable1.IsEmpty then
+  begin
+    ADOTable1.Edit;
+    ShowMessage('Modifier les informations puis cliquze sur Enregistrer');
+end;
+     end;
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+  if not ADOTable1.IsEmpty then
+  begin
+    if MessageDlg(
+        'Voulez vous supprimer ce client?',
+        mtConfirmation,
+        [mbYes, mbNo],
+        0
+        )=mrYes then
+        begin
+          ADOTable1.Delete;
+
+    end;
+  end;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+var largeur : integer;
+begin
+  //Largeur des colonnes
+  largeur := DBGrid1.ClientWidth div DBGrid1.Columns.Count;
+  DBGrid1.Columns[0].Width := largeur;
+  DBGrid1.Columns[1].Width := largeur;
+  DBGrid1.Columns[2].Width := largeur;
+  DBGrid1.Columns[3].Width := largeur;
+  DBGrid1.Columns[4].Width := largeur;
+  DBGrid1.Columns[5].Width := largeur;
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+begin
+  if ADOTable1.State in [dsEdit, dsInsert] then
+    ADOTable1.Cancel;
+end;
+
+procedure TForm1.Button6Click(Sender: TObject);
+
+begin
+ ADOTable1.Locate(
+  'Nom',
+  Edit1.Text,
+  [loCaseInsensitive, loPartialKey]
+  );
+  end;
+
+
+procedure TForm1.ComboBox1Change(Sender: TObject);
+begin
+// if ComboBox1.Text = 'Nom' then
+  ADOTable1.sort:= ComboBox1.Text + ' ASC';
+end;
+
+procedure TForm1.Button7Click(Sender: TObject);
+begin
+  ADOTable2.Append;
+end;
+
+procedure TForm1.Button8Click(Sender: TObject);
+begin
+  if not ADOTable2.IsEmpty then
+  begin
+    ADOTable2.Edit;
+    ShowMessage('Modifier les informations puis cliquze sur Enregistrer');
+  end;
+end;
+procedure TForm1.Button9Click(Sender: TObject);
+begin
+  if not ADOTable2.IsEmpty then
+  begin
+    if MessageDlg(
+        'Voulez vous supprimer ce client?',
+        mtConfirmation,
+        [mbYes, mbNo],
+        0
+        )=mrYes then
+        begin
+          ADOTable2.Delete;
+
+    end;
+  end;
+end;
+procedure TForm1.Button10Click(Sender: TObject);
+begin
+  ADOTable2.Post;
+  ShowMessage('Client enregistré avec succès.');
+end;
+
+procedure TForm1.ComboBox2Change(Sender: TObject);
+begin
+// if ComboBox1.Text = 'Nom' then
+  ADOTable2.sort:= ComboBox2.Text + ' ASC';
+end;
+end.
+
+
